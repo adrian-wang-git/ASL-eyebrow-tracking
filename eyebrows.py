@@ -19,6 +19,10 @@ BROW_SCORES = ["browInnerUp", "browOuterUpLeft", "browOuterUpRight",
                "browDownLeft", "browDownRight"]
 RAISED_BROW_THRESHOLD = 0.18
 LOWERED_BROW_THRESHOLD = 0.15
+INNER_UP_WEIGHT = 0.4
+OUTER_UP_WEIGHT = 0.4
+OUTER_UP_RIGHT_WEIGHT = 0.2
+
 cap = cv2.VideoCapture(0)
 
 while True:
@@ -52,13 +56,17 @@ while True:
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
             text_y_cord += 25
 
-        raised_avg_score = (scores["browInnerUp"] + scores["browOuterUpLeft"] + scores["browOuterUpRight"]) / 3
+
+        raised_avg_score = (scores["browInnerUp"] * INNER_UP_WEIGHT +
+                           scores["browOuterUpLeft"] * OUTER_UP_WEIGHT +
+                           scores["browOuterUpRight"] * OUTER_UP_RIGHT_WEIGHT) / (INNER_UP_WEIGHT + OUTER_UP_WEIGHT + OUTER_UP_RIGHT_WEIGHT)
+
         lowered_avg_score = (scores["browDownLeft"] + scores["browDownRight"]) / 2
 
         if raised_avg_score > RAISED_BROW_THRESHOLD:
-            cv2.putText(frame, "RAISED", (10, height - 20), cv2.FONT_HERSHEY_SIMPLEX, 1.4, (0, 255, 0), 3)
+            cv2.putText(frame, "RAISED (Y/N Q)", (10, height - 20), cv2.FONT_HERSHEY_SIMPLEX, 1.4, (0, 255, 0), 3)
         elif lowered_avg_score > LOWERED_BROW_THRESHOLD:
-            cv2.putText(frame, "LOWERED", (10, height - 20), cv2.FONT_HERSHEY_SIMPLEX, 1.4, (0, 0, 255), 3)
+            cv2.putText(frame, "LOWERED (WH- Q)", (10, height - 20), cv2.FONT_HERSHEY_SIMPLEX, 1.4, (0, 0, 255), 3)
         else:
             cv2.putText(frame, "NEUTRAL", (10, height - 20), cv2.FONT_HERSHEY_SIMPLEX, 1.4, (0, 255, 255), 3)
 
