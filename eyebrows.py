@@ -17,9 +17,8 @@ landmarker = vision.FaceLandmarker.create_from_options(options)
 BROW_POINTS = [70, 63, 105, 66, 107, 336, 296, 334, 293, 300]
 BROW_SCORES = ["browInnerUp", "browOuterUpLeft", "browOuterUpRight",
                "browDownLeft", "browDownRight"]
-RAISED_BROW_THRESHOLD = 0.20
+RAISED_BROW_THRESHOLD = 0.18
 LOWERED_BROW_THRESHOLD = 0.15
-
 cap = cv2.VideoCapture(0)
 
 while True:
